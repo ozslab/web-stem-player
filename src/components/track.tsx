@@ -5,6 +5,7 @@ import {
   Stack,
   ToggleButton,
   ToggleButtonGroup,
+  Tooltip,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { formatAsDb } from "../lib/utils/audio.util";
@@ -61,20 +62,24 @@ export function Track(props: Props) {
       <Stack direction="column" alignItems="center">
         <Stack direction="row" spacing={0} marginTop={1}>
           <ToggleButtonGroup value={activatedButtons}>
-            <ToggleButton
-              value={TrackButtonValue.muted}
-              size="small"
-              onClick={() => setMuted((currValue) => !currValue)}
-            >
-              <MusicOffIcon />
-            </ToggleButton>
-            <ToggleButton
-              value={TrackButtonValue.soloed}
-              size="small"
-              onClick={() => setSoloed((currValue) => !currValue)}
-            >
-              <PriorityHighIcon />
-            </ToggleButton>
+            <Tooltip title="Mute">
+              <ToggleButton
+                value={TrackButtonValue.muted}
+                size="small"
+                onClick={() => setMuted((currValue) => !currValue)}
+              >
+                <MusicOffIcon />
+              </ToggleButton>
+            </Tooltip>
+            <Tooltip title="Solo">
+              <ToggleButton
+                value={TrackButtonValue.soloed}
+                size="small"
+                onClick={() => setSoloed((currValue) => !currValue)}
+              >
+                <PriorityHighIcon />
+              </ToggleButton>
+            </Tooltip>
           </ToggleButtonGroup>
         </Stack>
         <Stack
