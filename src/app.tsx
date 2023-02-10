@@ -4,7 +4,7 @@ import { Track } from "./components/track";
 import { Player } from "./components/player";
 import { useAudio } from "./lib/hooks/use-audio.hook";
 
-const baseUrl = "http://127.0.0.1:5500/audio/";
+const baseUrl = "audio/";
 const audioFileNames = [
   "Drums.mp3",
   "Bass.mp3",
