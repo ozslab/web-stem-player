@@ -17,6 +17,7 @@ import { Player } from "./components/player";
 import { useAudio } from "./lib/hooks/use-audio.hook";
 import { getTheme } from "./lib/utils/theme.util";
 import { useThemeDetector } from "./lib/hooks/use-theme-detector";
+import { RandomStory } from "./components/random-story";
 
 const baseUrl = "audio/";
 const audioFileNames = [
@@ -49,6 +50,7 @@ export function App() {
       {isReady ? (
         <Paper>
           <Stack direction="row" justifyContent="end">
+            <RandomStory />
             <ToggleButtonGroup
               value={theme}
               exclusive
