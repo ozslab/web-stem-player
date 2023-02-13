@@ -19,7 +19,7 @@ enum PlayState {
   "stopped" = "stopped",
 }
 
-export function Player(props: Props) {
+export function Player({ onStart, onStop }: Props) {
   const [playState, setPlayState] = useState<PlayState | null>(null);
 
   return (
@@ -35,12 +35,12 @@ export function Player(props: Props) {
           }}
         >
           <Tooltip title="Play">
-            <ToggleButton value={PlayState.started} onClick={props.onStart}>
+            <ToggleButton value={PlayState.started} onClick={onStart}>
               <PlayArrowIcon />
             </ToggleButton>
           </Tooltip>
           <Tooltip title="Stop">
-            <ToggleButton value={PlayState.stopped} onClick={props.onStop}>
+            <ToggleButton value={PlayState.stopped} onClick={onStop}>
               <StopIcon />
             </ToggleButton>
           </Tooltip>

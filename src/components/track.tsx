@@ -7,7 +7,7 @@ import {
   ToggleButtonGroup,
   Tooltip,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { formatAsDb } from "../lib/utils/audio.util";
 import MusicOffIcon from "@mui/icons-material/MusicOff";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
@@ -22,12 +22,11 @@ type Props = {
   trackIndex: number;
   minDb: number;
   maxDb: number;
-  onVolumeChange: (trackIndex: number, volumeInDb: number) => void;
 };
 
 enum TrackButtonValue {
-  muted = 1,
-  soloed = 2,
+  muted = "muted",
+  soloed = "soloed",
 }
 
 const getMarks = (minDb: number, maxDb: number): Mark[] => [
@@ -36,21 +35,39 @@ const getMarks = (minDb: number, maxDb: number): Mark[] => [
   { value: maxDb, label: formatAsDb(maxDb) },
 ];
 
-export function Track(props: Props) {
-  const { minDb, maxDb, trackIndex, onVolumeChange } = props;
-  const [marks] = useState<Mark[]>(() => getMarks(minDb, maxDb));
+export function Track({ trackIndex, minDb, maxDb }: Props) {
   const [muted, setMuted] = useRecoilState(trackMutedState(trackIndex));
   const [soloed, setSoloed] = useRecoilState(trackSoloedState(trackIndex));
   const [volume, setVolume] = useRecoilState(trackVolumeState(trackIndex));
-  const [activatedButtons, setActivatedButtons] = useState<number[]>([]);
+  const [defaultVolume] = useState(volume);
 
-  useEffect(() => {
-    setActivatedButtons([
-      ...(muted ? [TrackButtonValue.muted] : []),
-      ...(soloed ? [TrackButtonValue.soloed] : []),
-    ]);
-    onVolumeChange(trackIndex, muted ? -Infinity : volume);
-  }, [trackIndex, muted, soloed, volume, onVolumeChange]);
+  const [activatedButtons, setActivatedButtons] = useState<TrackButtonValue[]>(
+    () => {
+      const activatedBtns: TrackButtonValue[] = [];
+
+      if (muted) {
+        activatedBtns.push(TrackButtonValue.muted);
+      }
+
+      if (soloed) {
+        activatedBtns.push(TrackButtonValue.soloed);
+      }
+
+      return activatedBtns;
+    }
+  );
+
+  const marks = useMemo(() => getMarks(minDb, maxDb), [minDb, maxDb]);
+
+  const handleToggle = (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: TrackButtonValue[]
+  ) => {
+    console.log(trackIndex, newValue);
+    setActivatedButtons(newValue);
+    setMuted(newValue.includes(TrackButtonValue.muted));
+    setSoloed(newValue.includes(TrackButtonValue.soloed));
+  };
 
   return (
     <Paper
@@ -61,22 +78,14 @@ export function Track(props: Props) {
     >
       <Stack direction="column" alignItems="center">
         <Stack direction="row" spacing={0} marginTop={1}>
-          <ToggleButtonGroup value={activatedButtons}>
+          <ToggleButtonGroup value={activatedButtons} onChange={handleToggle}>
             <Tooltip title="Mute">
-              <ToggleButton
-                value={TrackButtonValue.muted}
-                size="small"
-                onClick={() => setMuted((currValue) => !currValue)}
-              >
+              <ToggleButton value={TrackButtonValue.muted} size="small">
                 <MusicOffIcon />
               </ToggleButton>
             </Tooltip>
             <Tooltip title="Solo">
-              <ToggleButton
-                value={TrackButtonValue.soloed}
-                size="small"
-                onClick={() => setSoloed((currValue) => !currValue)}
-              >
+              <ToggleButton value={TrackButtonValue.soloed} size="small">
                 <PriorityHighIcon />
               </ToggleButton>
             </Tooltip>
@@ -95,14 +104,16 @@ export function Track(props: Props) {
               },
             }}
             orientation="vertical"
-            min={props.minDb}
-            max={props.maxDb}
+            min={minDb}
+            max={maxDb}
             step={1}
-            defaultValue={0}
+            defaultValue={defaultVolume}
             marks={marks}
             valueLabelDisplay="auto"
             valueLabelFormat={formatAsDb}
-            onChange={(_, value) => setVolume(value as number)}
+            onChange={(_, volume) => {
+              setVolume(volume as number);
+            }}
           />
         </Stack>
       </Stack>

@@ -4,6 +4,7 @@ import {
   CircularProgress,
   Paper,
   Stack,
+  Theme,
   ThemeProvider,
   ToggleButton,
   ToggleButtonGroup,
@@ -18,6 +19,8 @@ import { useAudio } from "./lib/hooks/use-audio.hook";
 import { getTheme } from "./lib/utils/theme.util";
 import { useThemeDetector } from "./lib/hooks/use-theme-detector";
 import { RandomStory } from "./components/random-story";
+import { useSetRecoilState } from "recoil";
+import { trackCountState } from "./state/faders.state";
 
 const baseUrl = "audio/";
 const audioFileNames = [
@@ -39,11 +42,16 @@ const darkTheme = getTheme("dark");
 export function App() {
   const isDarkTheme = useThemeDetector();
   const [theme, setTheme] = useState(isDarkTheme ? darkTheme : lightTheme);
+  const setTrackCount = useSetRecoilState(trackCountState);
   const { isReady, start, stop, setVolume } = useAudio(audioFileUrls);
 
   useEffect(() => {
     setTheme(isDarkTheme ? darkTheme : lightTheme);
   }, [isDarkTheme]);
+
+  useEffect(() => {
+    setTrackCount(audioFileUrls.length);
+  }, [audioFileUrls]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -54,7 +62,7 @@ export function App() {
             <ToggleButtonGroup
               value={theme}
               exclusive
-              onChange={(_, newTheme) => {
+              onChange={(_, newTheme: Theme | null) => {
                 if (newTheme) {
                   setTheme(newTheme);
                 }
@@ -79,7 +87,6 @@ export function App() {
                 <Track
                   key={audioFileUrl}
                   trackIndex={trackIndex}
-                  onVolumeChange={setVolume}
                   minDb={-40}
                   maxDb={10}
                 />

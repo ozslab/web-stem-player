@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { AudioContext, IAudioBufferSourceNode, IAudioContext, IGainNode } from 'standardized-audio-context';
+import { useRecoilValue } from "recoil";
+import {
+  AudioContext,
+  IAudioBufferSourceNode,
+  IAudioContext,
+  IGainNode,
+} from "standardized-audio-context";
+import { trackVolumesState } from "../../state/faders.state";
 import { convertToGain, decodeAudioData } from "../utils/audio.util";
 import { loadFile } from "../utils/file.util";
 
@@ -29,43 +36,68 @@ const useAudioContext = (audioFilePaths: string[]) => {
   return { audioContext, audioBuffers, isReady };
 };
 
+const createGainNode = (audioContext: IAudioContext, value: number) => {
+  const gainNode = audioContext.createGain();
+  gainNode.gain.value = 1; // setting it to 100%
+  return gainNode;
+};
+
 export function useAudio(audioFilePaths: string[]) {
   const { audioContext, audioBuffers, isReady } =
     useAudioContext(audioFilePaths);
-  const [trackSources, setTrackSources] = useState<
-    (IAudioBufferSourceNode<IAudioContext> | null)[]
-  >([]);
-  const [gainNodes, setGainNodes] = useState<IGainNode<IAudioContext>[]>([]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const trackVolumes = useRecoilValue(trackVolumesState);
+  const [trackSources] = useState<IAudioBufferSourceNode<IAudioContext>[]>([]);
+  const [gainNodes] = useState<IGainNode<IAudioContext>[]>([]);
 
-  const start = () => {
-    const trackSrcs: IAudioBufferSourceNode<IAudioContext>[] = [];
-    const gainNodes: IGainNode<IAudioContext>[] = [];
-    audioBuffers.forEach((audioBuffer, trackIndex) => {
-      const trackSource = trackSources[trackIndex];
-      if (trackSource) {
-        trackSource.stop();
-      }
-      if (audioContext && audioBuffer) {
-        const trackSrc = audioContext.createBufferSource();
-        trackSrc.buffer = audioBuffer;
-        const gainNode = audioContext.createGain();
-        gainNodes.push(gainNode);
-        gainNode.gain.value = 1; // setting it to 100%
-        gainNode.connect(audioContext.destination);
-        trackSrc.connect(gainNode).connect(audioContext.destination);
-        trackSrc.start();
-        trackSrcs.push(trackSrc);
-      }
-    });
-    setTrackSources(trackSrcs);
-    setGainNodes(gainNodes);
-  };
+  useEffect(() => {
+    trackVolumes.forEach((trackVolume: number, trackIndex: number) =>
+      setVolume(trackIndex, trackVolume)
+    );
+  });
 
   const stop = () => {
-    trackSources.forEach((trackSource) => {
-      if (trackSource) {
-        trackSource.stop();
-      }
+    if (isPlaying) {
+      trackSources.forEach((trackSource) => {
+        if (trackSource) {
+          trackSource.stop();
+        }
+      });
+      setIsPlaying(false);
+    }
+  };
+
+  const initTracks = (
+    audioContext: IAudioContext | null,
+    audioBuffers: AudioBuffer[],
+    trackVolumes: number[]
+  ) => {
+    if (audioContext) {
+      trackSources.length = 0;
+      gainNodes.length = 0;
+      audioBuffers.forEach((audioBuffer, trackIndex) => {
+        const trackSrc = audioContext.createBufferSource();
+        trackSrc.buffer = audioBuffer;
+        const gainNode = createGainNode(
+          audioContext,
+          convertToGain(trackVolumes[trackIndex])
+        );
+        gainNodes.push(gainNode);
+        gainNode.connect(audioContext.destination);
+        trackSrc.connect(gainNode).connect(audioContext.destination);
+        trackSources.push(trackSrc);
+      });
+    }
+  };
+
+  const start = () => {
+    stop();
+    setTimeout(() => {
+      initTracks(audioContext, audioBuffers, trackVolumes);
+      trackSources.forEach((trackSource) => {
+        trackSource.start();
+      });
+      setIsPlaying(true);
     });
   };
 

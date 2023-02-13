@@ -1,5 +1,9 @@
-export const createUpdatedArray = <T>(
-  array: T[],
-  index: number,
-  newTalue: T
-): T[] => [...array.slice(0, index - 1), newTalue, ...array.slice(index + 1)];
+export const createArrayWithIndices = (arrayLength: number): number[] => {
+  const array = [];
+
+  for (let index = 0; index < arrayLength; ++index) {
+    array.push(index);
+  }
+
+  return array;
+};
