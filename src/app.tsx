@@ -24,12 +24,11 @@ import { trackCountState } from "./state/faders.state";
 
 const baseUrl = "audio/";
 const audioFileNames = [
-  "Drums.mp3",
-  "Bass.mp3",
-  "Instruments.mp3",
-  "Vocal.mp3",
-  // "Verb.mp3",
-  // "Vocal_Verb.mp3",
+  "drums.mp3",
+  "bassguitar.mp3",
+  "clav.mp3",
+  "leadguitar.mp3",
+  "horns.mp3",
 ];
 
 const audioFileUrls = audioFileNames.map(
