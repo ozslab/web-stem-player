@@ -21,6 +21,7 @@ import { useThemeDetector } from "./lib/hooks/use-theme-detector";
 import { RandomStory } from "./components/random-story";
 import { useSetRecoilState } from "recoil";
 import { trackCountState } from "./state/faders.state";
+import { getFileNameWithoutExtension } from "./lib/utils/file.util";
 
 const baseUrl = "audio/";
 const audioFileNames = [
@@ -86,6 +87,9 @@ export function App() {
                 <Track
                   key={audioFileUrl}
                   trackIndex={trackIndex}
+                  trackLabel={getFileNameWithoutExtension(
+                    audioFileNames[trackIndex]
+                  )}
                   minDb={-40}
                   maxDb={10}
                 />

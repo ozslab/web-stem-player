@@ -20,6 +20,7 @@ import {
 
 type Props = {
   trackIndex: number;
+  trackLabel: string;
   minDb: number;
   maxDb: number;
 };
@@ -35,7 +36,7 @@ const getMarks = (minDb: number, maxDb: number): Mark[] => [
   { value: maxDb, label: formatAsDb(maxDb) },
 ];
 
-export function Track({ trackIndex, minDb, maxDb }: Props) {
+export function Track({ trackIndex, trackLabel, minDb, maxDb }: Props) {
   const [muted, setMuted] = useRecoilState(trackMutedState(trackIndex));
   const [soloed, setSoloed] = useRecoilState(trackSoloedState(trackIndex));
   const [volume, setVolume] = useRecoilState(trackVolumeState(trackIndex));
@@ -63,7 +64,6 @@ export function Track({ trackIndex, minDb, maxDb }: Props) {
     event: React.MouseEvent<HTMLElement>,
     newValue: TrackButtonValue[]
   ) => {
-    console.log(trackIndex, newValue);
     setActivatedButtons(newValue);
     setMuted(newValue.includes(TrackButtonValue.muted));
     setSoloed(newValue.includes(TrackButtonValue.soloed));
@@ -72,11 +72,21 @@ export function Track({ trackIndex, minDb, maxDb }: Props) {
   return (
     <Paper
       sx={{
-        width: 96,
-        height: 240,
+        width: 120,
+        height: 270,
       }}
     >
       <Stack direction="column" alignItems="center">
+        <Stack
+          direction="row"
+          sx={{
+            marginTop: 2,
+            marginBottom: 1,
+            justifyContent: "center",
+          }}
+        >
+          {trackLabel}
+        </Stack>
         <Stack direction="row" spacing={0} marginTop={1}>
           <ToggleButtonGroup value={activatedButtons} onChange={handleToggle}>
             <Tooltip title="Mute">
@@ -94,7 +104,7 @@ export function Track({ trackIndex, minDb, maxDb }: Props) {
         <Stack
           sx={{
             height: 120,
-            marginTop: 6,
+            marginTop: 4,
           }}
         >
           <Slider
