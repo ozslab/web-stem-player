@@ -1,4 +1,4 @@
-# Web STEM Player
+# Web Stem Player
 
 This is a proof-of-concept project to create a multi-track player which works in the browser.
 
