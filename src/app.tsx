@@ -22,6 +22,7 @@ import { RandomStory } from "./components/random-story";
 import { useSetRecoilState } from "recoil";
 import { trackCountState } from "./state/faders.state";
 import { getFileNameWithoutExtension } from "./lib/utils/file.util";
+import { RandomCatGif } from "./components/random-cat-gif";
 
 const baseUrl = "audio/";
 const audioFileNames = [
@@ -90,7 +91,7 @@ export function App() {
           </Stack>
           <Stack direction="column" sx={{ paddingX: 6, paddingY: 3 }}>
             <Player onStart={start} onStop={stop} />
-            <Stack direction="row" spacing={2}>
+            <Stack direction="row" spacing={2} alignItems="center">
               {audioFileUrls.map((audioFileUrl, trackIndex) => (
                 <Track
                   key={audioFileUrl}
@@ -102,6 +103,7 @@ export function App() {
                   maxDb={10}
                 />
               ))}
+              <RandomCatGif />
             </Stack>
           </Stack>
         </Paper>
