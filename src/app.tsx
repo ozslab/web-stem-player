@@ -68,16 +68,16 @@ export function App() {
                 }
               }}
             >
-              <Tooltip title="Light theme">
-                <ToggleButton value={lightTheme} size="small">
+              <ToggleButton value={lightTheme} size="small">
+                <Tooltip title="Light theme">
                   <LightModeIcon />
-                </ToggleButton>
-              </Tooltip>
-              <Tooltip title="Dark theme">
-                <ToggleButton value={darkTheme} size="small">
+                </Tooltip>
+              </ToggleButton>
+              <ToggleButton value={darkTheme} size="small">
+                <Tooltip title="Dark theme">
                   <DarkModeIcon />
-                </ToggleButton>
-              </Tooltip>
+                </Tooltip>
+              </ToggleButton>
             </ToggleButtonGroup>
           </Stack>
           <Stack direction="column" sx={{ paddingX: 6, paddingY: 3 }}>

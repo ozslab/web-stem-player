@@ -34,16 +34,16 @@ export function Player({ onStart, onStop }: Props) {
             }
           }}
         >
-          <Tooltip title="Play">
-            <ToggleButton value={PlayState.started} onClick={onStart}>
+          <ToggleButton value={PlayState.started} onClick={onStart}>
+            <Tooltip title="Play">
               <PlayArrowIcon />
-            </ToggleButton>
-          </Tooltip>
-          <Tooltip title="Stop">
-            <ToggleButton value={PlayState.stopped} onClick={onStop}>
+            </Tooltip>
+          </ToggleButton>
+          <ToggleButton value={PlayState.stopped} onClick={onStop}>
+            <Tooltip title="Stop">
               <StopIcon />
-            </ToggleButton>
-          </Tooltip>
+            </Tooltip>
+          </ToggleButton>
         </ToggleButtonGroup>
       </Stack>
     </Paper>

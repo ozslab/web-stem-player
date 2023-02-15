@@ -89,16 +89,16 @@ export function Track({ trackIndex, trackLabel, minDb, maxDb }: Props) {
         </Stack>
         <Stack direction="row" spacing={0} marginTop={1}>
           <ToggleButtonGroup value={activatedButtons} onChange={handleToggle}>
-            <Tooltip title="Mute">
-              <ToggleButton value={TrackButtonValue.muted} size="small">
+            <ToggleButton value={TrackButtonValue.muted} size="small">
+              <Tooltip title="Mute">
                 <MusicOffIcon />
-              </ToggleButton>
-            </Tooltip>
-            <Tooltip title="Solo">
-              <ToggleButton value={TrackButtonValue.soloed} size="small">
+              </Tooltip>
+            </ToggleButton>
+            <ToggleButton value={TrackButtonValue.soloed} size="small">
+              <Tooltip title="Solo">
                 <PriorityHighIcon />
-              </ToggleButton>
-            </Tooltip>
+              </Tooltip>
+            </ToggleButton>
           </ToggleButtonGroup>
         </Stack>
         <Stack
