@@ -27,7 +27,7 @@ export function RandomStory() {
   const actionComponent = (
     <IconButton
       size="small"
-      aria-label="close"
+      aria-label="Close random story"
       color="inherit"
       onClick={handleClose}
     >
@@ -37,11 +37,14 @@ export function RandomStory() {
 
   return (
     <>
-      <Tooltip title="A random story (powered by Genrenator)">
-        <Button onClick={debouncedHandleClick}>
+      <Button
+        onClick={debouncedHandleClick}
+        aria-label="Get a random story (powered by Genrenator)"
+      >
+        <Tooltip title="A random story (powered by Genrenator)">
           <CasinoIcon />
-        </Button>
-      </Tooltip>
+        </Tooltip>
+      </Button>
       <Snackbar
         autoHideDuration={null}
         anchorOrigin={{ vertical: "top", horizontal: "left" }}

@@ -43,7 +43,7 @@ export function App() {
   const isDarkTheme = useThemeDetector();
   const [theme, setTheme] = useState(isDarkTheme ? darkTheme : lightTheme);
   const setTrackCount = useSetRecoilState(trackCountState);
-  const { isReady, start, stop, setVolume } = useAudio(audioFileUrls);
+  const { isReady, start, stop } = useAudio(audioFileUrls);
 
   useEffect(() => {
     setTheme(isDarkTheme ? darkTheme : lightTheme);
@@ -68,12 +68,20 @@ export function App() {
                 }
               }}
             >
-              <ToggleButton value={lightTheme} size="small">
+              <ToggleButton
+                value={lightTheme}
+                size="small"
+                aria-label="Switch to light theme"
+              >
                 <Tooltip title="Light theme">
                   <LightModeIcon />
                 </Tooltip>
               </ToggleButton>
-              <ToggleButton value={darkTheme} size="small">
+              <ToggleButton
+                value={darkTheme}
+                size="small"
+                aria-label="Switch to dark theme"
+              >
                 <Tooltip title="Dark theme">
                   <DarkModeIcon />
                 </Tooltip>
@@ -100,7 +108,7 @@ export function App() {
       ) : (
         <Box sx={{ display: "flex" }} margin={2}>
           <Stack direction="row" alignItems="center">
-            <CircularProgress />
+            <CircularProgress aria-label="The app is loading, please wait" />
             <Box margin={2}>Loading...</Box>
           </Stack>
         </Box>

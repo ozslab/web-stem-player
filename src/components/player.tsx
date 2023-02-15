@@ -34,12 +34,20 @@ export function Player({ onStart, onStop }: Props) {
             }
           }}
         >
-          <ToggleButton value={PlayState.started} onClick={onStart}>
+          <ToggleButton
+            value={PlayState.started}
+            onClick={onStart}
+            aria-label="Start playing tracks"
+          >
             <Tooltip title="Play">
               <PlayArrowIcon />
             </Tooltip>
           </ToggleButton>
-          <ToggleButton value={PlayState.stopped} onClick={onStop}>
+          <ToggleButton
+            value={PlayState.stopped}
+            onClick={onStop}
+            aria-label="Stop playing tracks"
+          >
             <Tooltip title="Stop">
               <StopIcon />
             </Tooltip>

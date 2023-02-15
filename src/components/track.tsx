@@ -89,12 +89,20 @@ export function Track({ trackIndex, trackLabel, minDb, maxDb }: Props) {
         </Stack>
         <Stack direction="row" spacing={0} marginTop={1}>
           <ToggleButtonGroup value={activatedButtons} onChange={handleToggle}>
-            <ToggleButton value={TrackButtonValue.muted} size="small">
+            <ToggleButton
+              value={TrackButtonValue.muted}
+              size="small"
+              aria-label={`Mute track ${trackLabel}`}
+            >
               <Tooltip title="Mute">
                 <MusicOffIcon />
               </Tooltip>
             </ToggleButton>
-            <ToggleButton value={TrackButtonValue.soloed} size="small">
+            <ToggleButton
+              value={TrackButtonValue.soloed}
+              size="small"
+              aria-label={`Solo track ${trackLabel}`}
+            >
               <Tooltip title="Solo">
                 <PriorityHighIcon />
               </Tooltip>
@@ -124,6 +132,7 @@ export function Track({ trackIndex, trackLabel, minDb, maxDb }: Props) {
             onChange={(_, volume) => {
               setVolume(volume as number);
             }}
+            aria-label={`Adjust volume of track ${trackLabel}`}
           />
         </Stack>
       </Stack>
